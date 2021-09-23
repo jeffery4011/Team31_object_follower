@@ -6,7 +6,7 @@ from geometry_msgs.msg import Point
 
 class controller:
 	def __init__(self):
-		self.WIDTH = 256 #FIXME please update this with width of frame
+		self.WIDTH = 410 #FIXME please update this with width of frame
 		self.deadZ = 10 #deadzone of 10 pixels
 		self.objX = self.WIDTH/2 #initialized to midpoint of frame to prevent premature movement
 		self.vel_msg = Twist()
