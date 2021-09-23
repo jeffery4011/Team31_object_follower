@@ -77,7 +77,7 @@ def find_object(img):
 
 
 if __name__ == '__main__':
-    pub = rospy.Publisher('chatter',Point, queue_size=10)
+    pub = rospy.Publisher('obj_coord',Point, queue_size=10)
     
     try:
         Find_object()

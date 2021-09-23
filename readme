@@ -1,1 +1,13 @@
-readme
+Deliverable: Package
+Functionality: Robot turns in place following an object
+Architecture:
+Package Team31_object_follower
+	Node find_object
+		(subscribes to /raspicam_node/image/compressed)
+		(publishes pixel coord of object)
+	Node rotate_robot
+		(subscribes to object coordinate messages from find_object)
+		(publishes velocity messages to cmd_vel)
+
+I have additionally written a test_publisher.py file which sends Point type messages on
+topic "/obj_coord". This is a test harness for rotate_robot.py
