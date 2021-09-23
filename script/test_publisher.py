@@ -23,12 +23,12 @@ def test_publisher():
 		pub.publish(msg)
 		rate.sleep()
 
-	msg.x = 127
-	msg.y = 69
-	msg.z = 0
-	for i in range(5):
-		pub.publish(msg)
-		rate.sleep()
+#	msg.x = 127
+#	msg.y = 69
+#	msg.z = 0
+#	for i in range(5):
+#		pub.publish(msg)
+#		rate.sleep()
 
 if __name__ == "__main__":
 	try:
