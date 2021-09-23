@@ -11,3 +11,18 @@ Package Team31_object_follower
 
 I have additionally written a test_publisher.py file which sends Point type messages on
 topic "/obj_coord". This is a test harness for rotate_robot.py
+
+STEPS FOR RUNNING ON BURGERBOT
+ssh
+ifconfig, note IP
+nano .bashrc and update with IP
+source .bashrc
+(FROM LAPTOP)copy package directory to burger using:
+	scp -r <Directory on your cpu to copy> burger@<ip-of-burger>:<Directory to copy to on robot>
+(BURGER)catkin_make
+roscore
+roslaunch turtlebot3_bringup turtlebot3_robot.launch
+new tab, new ssh
+rosrun Team31_object_follower rotate_robot.py
+new tab, new ssh
+rosrun Team31_object_follower test_publisher.py
