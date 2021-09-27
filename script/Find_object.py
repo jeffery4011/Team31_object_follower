@@ -19,11 +19,12 @@ def Find_object():
     #rospy.init_node('talker',anonymous = True)
     rospy.init_node('Find_object',anonymous = True)
     rate = rospy.Rate(10)
-    rospy.Subscriber("/raspicam_node/image/compressed",CompressedImage,callback,queue_size=1,buff_size=6553)
+    rospy.Subscriber("/raspicam_node/image/compressed",CompressedImage,callback,queue_size=1,buff_size=60000)
     
     
 
 def callback(data):
+    global pub
     try:
         bridge = CvBridge()
         cv_image = bridge.compressed_imgmsg_to_cv2(data,'passthrough')
@@ -34,6 +35,15 @@ def callback(data):
             msg.y = point[1]
             msg.z = 0
             pub.publish(msg)
+            rospy.loginfo('publish: ' + str(msg.x))
+        else:
+            msg = Point()
+            msg.x = 205
+            msg.y = 0
+            msg.z = 0
+            pub.publish(msg)
+            rospy.loginfo('publish: ' + str(msg.x))
+        rate = rospy.Rate(10)
         
     except CvBridgeError:
         rospy.logerr('CvBridge Error')
@@ -51,11 +61,11 @@ def find_object(img):
             #err_allow = err_allow*W # the err_allowed from middle
             #Middle = W//2
             target_template = cv.imread('object.jpg')
-            threshold = 0.7
+            threshold = 0.6
             
+            M = 0
             
-            
-            for scale in range(50,100,10):
+            for scale in range(0,300,25):
                 
                 frame = Compare_rgb.copy()
                 ratio = int(frame.shape[1]/frame.shape[0])
@@ -63,7 +73,7 @@ def find_object(img):
                 frame=cv.resize(frame,(int(frame.shape[1]+round(ratio*scale)),int(frame.shape[0]+scale)))
                 res=cv.matchTemplate(frame,target_template,cv.TM_CCOEFF_NORMED)
                 min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
-                print(max_val)
+                M = max(max_val,M)
                 if max_val < threshold:
                     continue
                 else:
@@ -90,5 +100,6 @@ if __name__ == '__main__':
     while True:
         try:
             Find_object()
+            rospy.spin()
         except rospy.ROSInterruptException:
             rospy.spin()
