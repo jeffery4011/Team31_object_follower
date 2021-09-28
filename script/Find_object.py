@@ -56,30 +56,32 @@ def callback(data):
 
 
 def find_object(img):
-            Compare_rgb = img# read the file 
+            #Compare_rgb = img# read the file 
             #W = Compare_rgb.shape[1]
             #err_allow = err_allow*W # the err_allowed from middle
             #Middle = W//2
             target_template = cv.imread('object.jpg')
-            threshold = 0.6
+            threshold = 0.65
             
             M = 0
             
-            for scale in range(0,300,25):
+            for scale in range(0,200,50):
                 
-                frame = Compare_rgb.copy()
+                frame = img
                 ratio = int(frame.shape[1]/frame.shape[0])
                 ratio=frame.shape[1]/frame.shape[0]
                 frame=cv.resize(frame,(int(frame.shape[1]+round(ratio*scale)),int(frame.shape[0]+scale)))
                 res=cv.matchTemplate(frame,target_template,cv.TM_CCOEFF_NORMED)
                 min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
                 M = max(max_val,M)
+                #rospy.loginfo('max_value: ' + str(M))
                 if max_val < threshold:
                     continue
                 else:
                     top_left = max_loc
                     middle_point = (top_left[0]+target_template.shape[1]//2,top_left[1]+target_template.shape[0]//2)
-                    print(middle_point)
+                    
+                    #print(middle_point)
                     return middle_point
                     # break
 
